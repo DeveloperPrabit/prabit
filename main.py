@@ -25,18 +25,6 @@ if(st.button("About Me")):
 	st.text("Welcome To Prabits Development!!!")
 
 
-# Header
-st.header("Created by prabit joshi") 
-
-# Subheader
-st.subheader("development using python")
-# Text
-st.text("Come to learn!!!")
-# Markdown
-st.markdown("### Thank you for your attention!")
-
-
-
 status = st.radio("Select Gender: ", ('Male', 'Female'))
 
 if st.checkbox("Show/Hide_Image"):
@@ -134,3 +122,17 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    # Close the database connection
+    conn.close()
+    st.write('Thanks for using Streamlit!')
+    st.balloons()
+    st.header("Created by prabit joshi") 
+
+# Subheader
+st.subheader("development using python")
+# Text
+st.text("Come to learn!!!")
+# Markdown
+st.markdown("### Thank you for your attention!")
+
