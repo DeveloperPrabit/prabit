@@ -25,7 +25,7 @@ st.title("Hello welcome to frontend using python!!!")
 st.button("Click me for no reason")
 
 if(st.button("About Me")):
-	st.text("Welcome To Prabits Development!!!")
+	st.text("Developed By Prabit Joshi!!!")
 
 
 status = st.radio("Select Gender: ", ('Male', 'Female'))
