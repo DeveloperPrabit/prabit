@@ -1,5 +1,8 @@
 # import module
 import streamlit as st
+import subprocess
+import admin
+
 # import Image from pillow to open images
 from PIL import Image
 
@@ -107,19 +110,22 @@ def navigate_to_main_page():
     elif selection == 'Settings':
         st.write('Here you can update your settings.')
 
+
 def main():
     global authenticated  # Use the global variable
 
-    page = st.sidebar.radio('Navigate:', ['Sign Up', 'Sign In'])
+    page = st.sidebar.radio('Navigate:', ['Sign Up', 'Sign In', 'Admin'])
 
     if not authenticated:  # Show sign-up and sign-in pages if not authenticated
         if page == 'Sign Up':
             signup()
         elif page == 'Sign In':
-            signin()
+            signin() 
+        elif page == 'Admin':
+            st.write('Welcome to the admin system')
+            subprocess.run(['streamlit', 'run', 'admin.py'])   
     else:  # If authenticated, show main page
         navigate_to_main_page()
-
 if __name__ == '__main__':
     main()
 
@@ -135,4 +141,3 @@ st.subheader("development using python")
 st.text("Come to learn!!!")
 # Markdown
 st.markdown("### Thank you for your attention!")
-
