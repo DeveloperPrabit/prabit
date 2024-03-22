@@ -17,7 +17,6 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS posts
 
 conn.commit()
 
-
 def admin_login():
     st.title('Admin Login')
 
@@ -37,26 +36,34 @@ def admin_login():
         else:
             st.error('Invalid username or password.')
 
-
 def admin_dashboard():
     st.title('Admin Dashboard')
 
     # Sidebar options
-    selected_option = st.sidebar.radio('Admin Options', ['Add User', 'Remove User', 'Add Picture', 'Remove Picture', 'Add Post', 'Remove Post'])
+    selected_option = st.sidebar.radio(
+        'Admin Options',
+        ['Add User', 'Remove User', 'Edit User', 'View Users', 'Add Picture', 'View Pictures', 'Add Post', 'View Posts', 'Exit'],
+        key='admin_options_radio'  # Unique key for this radio widget
+    )
 
     if selected_option == 'Add User':
         add_user()
     elif selected_option == 'Remove User':
         remove_user()
+    elif selected_option == 'Edit User':
+        edit_user()
+    elif selected_option == 'View Users':
+        view_users()
     elif selected_option == 'Add Picture':
         add_picture()
-    elif selected_option == 'Remove Picture':
-        remove_picture()
+    elif selected_option == 'View Pictures':
+        view_pictures()
     elif selected_option == 'Add Post':
         add_post()
-    elif selected_option == 'Remove Post':
-        remove_post()
-
+    elif selected_option == 'View Posts':
+        view_posts()
+    elif selected_option == 'Exit':
+        st.stop()
 
 def add_user():
     st.header('Add User')
@@ -75,7 +82,6 @@ def add_user():
         except sqlite3.IntegrityError:
             st.error('Username or email already exists.')
 
-
 def remove_user():
     st.header('Remove User')
 
@@ -86,6 +92,31 @@ def remove_user():
         conn.commit()
         st.success('User removed successfully.')
 
+def edit_user():
+    st.header('Edit User')
+
+    username = st.text_input('Username', key='edit_user_username')
+    email = st.text_input('Email', key='edit_user_email')
+    password = st.text_input('Password', type='password', key='edit_user_password')
+    is_admin = st.checkbox('Admin Privileges', key='edit_user_checkbox')
+
+    if st.button('Update User'):
+        cursor.execute("UPDATE users SET email=?, password=?, is_admin=? WHERE username=?",
+                       (email, password, 1 if is_admin else 0, username))
+        conn.commit()
+        st.success('User updated successfully.')
+
+def view_users():
+    st.header('View Users')
+
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+
+    if users:
+        for user in users:
+            st.write(f"Username: {user[1]}, Email: {user[2]}, Admin: {'Yes' if user[4] == 1 else 'No'}")
+    else:
+        st.info('No users found.')
 
 def add_picture():
     st.header('Add Picture')
@@ -101,17 +132,17 @@ def add_picture():
         except sqlite3.IntegrityError:
             st.error('Filename already exists.')
 
+def view_pictures():
+    st.header('View Pictures')
 
-def remove_picture():
-    st.header('Remove Picture')
+    cursor.execute("SELECT * FROM pictures")
+    pictures = cursor.fetchall()
 
-    filename = st.text_input('Filename', key='remove_picture_filename')
-
-    if st.button('Remove Picture'):
-        cursor.execute("DELETE FROM pictures WHERE filename=?", (filename,))
-        conn.commit()
-        st.success('Picture removed successfully.')
-
+    if pictures:
+        for picture in pictures:
+            st.write(f"Filename: {picture[1]}, Description: {picture[2]}")
+    else:
+        st.info('No pictures found.')
 
 def add_post():
     st.header('Add Post')
@@ -124,21 +155,20 @@ def add_post():
         conn.commit()
         st.success('Post added successfully.')
 
+def view_posts():
+    st.header('View Posts')
 
-def remove_post():
-    st.header('Remove Post')
+    cursor.execute("SELECT * FROM posts")
+    posts = cursor.fetchall()
 
-    post_id = st.number_input('Post ID', min_value=1, key='remove_post_id')
-
-    if st.button('Remove Post'):
-        cursor.execute("DELETE FROM posts WHERE id=?", (post_id,))
-        conn.commit()
-        st.success('Post removed successfully.')
-
+    if posts:
+        for post in posts:
+            st.write(f"Title: {post[1]}\nContent: {post[2]}\n")
+    else:
+        st.info('No posts found.')
 
 def main():
     admin_login()
-
 
 if __name__ == '__main__':
     main()
