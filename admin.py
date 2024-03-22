@@ -169,6 +169,6 @@ def view_posts():
 
 def main():
     admin_login()
-
+    admin_dashboard()
 if __name__ == '__main__':
     main()
