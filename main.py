@@ -3,6 +3,18 @@ import streamlit as st
 # import Image from pillow to open images
 from PIL import Image
 
+import sqlite3
+
+# Connect to SQLite database
+conn = sqlite3.connect('signup_data.db')
+cursor = conn.cursor()
+
+# Create a table to store signup data if it doesn't exist
+cursor.execute('''CREATE TABLE IF NOT EXISTS users
+                (username TEXT PRIMARY KEY, email TEXT, password TEXT)''')
+conn.commit()
+
+
 # Title
 st.title("Hello welcome to frontend using python!!!")
 
@@ -42,39 +54,59 @@ hobby = st.selectbox("Hobbies: ",
 
 st.write("Your hobby is: ", hobby)
 
-# Page title
-st.title('Sign Up')
 
-# Input fields for username, email, and password
-username = st.text_input('Username')
-email = st.text_input('Email')
-password = st.text_input('Password', type='password')
+# Global variable to track authentication status
+authenticated = False
 
-# Button to submit the form
-if st.button('Sign Up'):
-    # Validation and processing logic
-    if username and email and password:
-        st.success('You have successfully signed up!')
-    else:
-        st.error('Please fill in all the fields.')
+def signup():
+    st.title('Sign Up')
 
+    # Input fields for username, email, and password with unique keys
+    username = st.text_input('Username', key='signup_username_input')
+    email = st.text_input('Email', key='signup_email_input')
+    password = st.text_input('Password', type='password', key='signup_password_input')
 
-def main():
+    # Button to submit the signup form
+    if st.button('Sign Up'):
+        try:
+            # Check if username already exists in the database
+            cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                st.error('Username already exists. Please choose a different username.')
+            else:
+                # Insert new user into the database
+                cursor.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+                               (username, email, password))
+                conn.commit()  # Commit changes to the database
+                st.success('You have successfully signed up! Proceed to sign in.')
+        except Exception as e:
+            st.error(f'An error occurred: {e}')
+
+def signin():
+    global authenticated  # Use the global variable
+
     st.title('Sign In')
 
     # Input fields for username and password with unique keys
-    username = st.text_input('Username', key='username_input')
-    password = st.text_input('Password', type='password', key='password_input')
+    username = st.text_input('Username', key='signin_username_input')
+    password = st.text_input('Password', type='password', key='signin_password_input')
 
     # Button to submit the sign-in form
     if st.button('Sign In'):
-        # Mock authentication logic (replace with actual logic)
-        if username == 'user' and password == 'pass':
-            st.success('You have successfully signed in!')
-            # Redirect to main page after successful sign-in
-            navigate_to_main_page()
-        else:
-            st.error('Invalid username or password. Please try again.')
+        try:
+            # Check if username exists in the database and passwords match
+            cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                st.success('You have successfully signed in!')
+                authenticated = True  # Set authentication status to True
+                # Redirect to main page after successful sign-in
+                navigate_to_main_page()
+            else:
+                st.error('Invalid username or password. Please try again.')
+        except Exception as e:
+            st.error(f'An error occurred: {e}')
 
 def navigate_to_main_page():
     st.sidebar.title('Navigation')
@@ -86,6 +118,19 @@ def navigate_to_main_page():
         st.write('This is your profile page.')
     elif selection == 'Settings':
         st.write('Here you can update your settings.')
+
+def main():
+    global authenticated  # Use the global variable
+
+    page = st.sidebar.radio('Navigate:', ['Sign Up', 'Sign In'])
+
+    if not authenticated:  # Show sign-up and sign-in pages if not authenticated
+        if page == 'Sign Up':
+            signup()
+        elif page == 'Sign In':
+            signin()
+    else:  # If authenticated, show main page
+        navigate_to_main_page()
 
 if __name__ == '__main__':
     main()
