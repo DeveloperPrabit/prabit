@@ -43,25 +43,35 @@ def admin_dashboard():
     selected_option = st.sidebar.radio(
         'Admin Options',
         ['Add User', 'Remove User', 'Edit User', 'View Users', 'Add Picture', 'View Pictures', 'Add Post', 'View Posts', 'Exit'],
-        key='admin_options_radio'  # Unique key for this radio widget
+        key='admin_options_radio'  # Unique key for the radio group
     )
 
+    # Generate unique keys based on selected option
+    add_user_key = 'add_user' if selected_option == 'Add User' else None
+    remove_user_key = 'remove_user' if selected_option == 'Remove User' else None
+    edit_user_key = 'edit_user' if selected_option == 'Edit User' else None
+    view_users_key = 'view_users' if selected_option == 'View Users' else None
+    add_picture_key = 'add_picture' if selected_option == 'Add Picture' else None
+    view_pictures_key = 'view_pictures' if selected_option == 'View Pictures' else None
+    add_post_key = 'add_post' if selected_option == 'Add Post' else None
+    view_posts_key = 'view_posts' if selected_option == 'View Posts' else None
+
     if selected_option == 'Add User':
-        add_user()
+        add_user(add_user_key)
     elif selected_option == 'Remove User':
-        remove_user()
+        remove_user(remove_user_key)
     elif selected_option == 'Edit User':
-        edit_user()
+        edit_user(edit_user_key)
     elif selected_option == 'View Users':
-        view_users()
+        view_users(view_users_key)
     elif selected_option == 'Add Picture':
-        add_picture()
+        add_picture(add_picture_key)
     elif selected_option == 'View Pictures':
-        view_pictures()
+        view_pictures(view_pictures_key)
     elif selected_option == 'Add Post':
-        add_post()
+        add_post(add_post_key)
     elif selected_option == 'View Posts':
-        view_posts()
+        view_posts(view_posts_key)
     elif selected_option == 'Exit':
         st.stop()
 
