@@ -75,7 +75,7 @@ def admin_dashboard():
     elif selected_option == 'Exit':
         st.stop()
 
-def add_user():
+def add_user(key=None):
     st.header('Add User')
 
     username = st.text_input('Username', key='add_user_username')
@@ -83,7 +83,7 @@ def add_user():
     password = st.text_input('Password', type='password', key='add_user_password')
     is_admin = st.checkbox('Admin Privileges', key='add_user_checkbox')
 
-    if st.button('Add User'):
+    if st.button('Add User', key=key):
         try:
             cursor.execute("INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)",
                            (username, email, password, 1 if is_admin else 0))
@@ -92,17 +92,17 @@ def add_user():
         except sqlite3.IntegrityError:
             st.error('Username or email already exists.')
 
-def remove_user():
+def remove_user(key=None):
     st.header('Remove User')
 
     username = st.text_input('Username', key='remove_user_username')
 
-    if st.button('Remove User'):
+    if st.button('Remove User', key=key):
         cursor.execute("DELETE FROM users WHERE username=?", (username,))
         conn.commit()
         st.success('User removed successfully.')
 
-def edit_user():
+def edit_user(key=None):
     st.header('Edit User')
 
     username = st.text_input('Username', key='edit_user_username')
@@ -110,13 +110,13 @@ def edit_user():
     password = st.text_input('Password', type='password', key='edit_user_password')
     is_admin = st.checkbox('Admin Privileges', key='edit_user_checkbox')
 
-    if st.button('Update User'):
+    if st.button('Update User', key=key):
         cursor.execute("UPDATE users SET email=?, password=?, is_admin=? WHERE username=?",
                        (email, password, 1 if is_admin else 0, username))
         conn.commit()
         st.success('User updated successfully.')
 
-def view_users():
+def view_users(key=None):
     st.header('View Users')
 
     cursor.execute("SELECT * FROM users")
@@ -128,13 +128,13 @@ def view_users():
     else:
         st.info('No users found.')
 
-def add_picture():
+def add_picture(key=None):
     st.header('Add Picture')
 
     filename = st.text_input('Filename', key='add_picture_filename')
     description = st.text_input('Description', key='add_picture_description')
 
-    if st.button('Add Picture'):
+    if st.button('Add Picture', key=key):
         try:
             cursor.execute("INSERT INTO pictures (filename, description) VALUES (?, ?)", (filename, description))
             conn.commit()
@@ -142,7 +142,7 @@ def add_picture():
         except sqlite3.IntegrityError:
             st.error('Filename already exists.')
 
-def view_pictures():
+def view_pictures(key=None):
     st.header('View Pictures')
 
     cursor.execute("SELECT * FROM pictures")
@@ -154,18 +154,18 @@ def view_pictures():
     else:
         st.info('No pictures found.')
 
-def add_post():
+def add_post(key=None):
     st.header('Add Post')
 
     title = st.text_input('Title', key='add_post_title')
     content = st.text_area('Content', key='add_post_content')
 
-    if st.button('Add Post'):
+    if st.button('Add Post', key=key):
         cursor.execute("INSERT INTO posts (title, content) VALUES (?, ?)", (title, content))
         conn.commit()
         st.success('Post added successfully.')
 
-def view_posts():
+def view_posts(key=None):
     st.header('View Posts')
 
     cursor.execute("SELECT * FROM posts")
