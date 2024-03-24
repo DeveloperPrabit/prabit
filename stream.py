@@ -105,7 +105,7 @@ github_file_url = "https://raw.githubusercontent.com/pornsta/prabit/main/file.tx
 if st.button("Download File"):
     file_content = fetch_github_file(github_file_url)
     if file_content:
-        st.download_button(label="Download File", data=file_content, file_name="file.txt")
+        st.download_button(label="Download now", data=file_content, file_name="file.txt")
     else:
         st.error("Failed to fetch file from GitHub. Please check the URL.")
         
