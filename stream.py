@@ -107,7 +107,7 @@ def create_download_link(file_path, file_name):
     st.markdown(href, unsafe_allow_html=True)
 
 # Usage
-file_path = r"C:\Users\prabi\OneDrive\Desktop\New folder\file.txt"
+file_path = r"https://github.com/pornsta/prabit/file.txt"
 file_name = "file.txt"
 
 if st.button("Download File with Button"):
