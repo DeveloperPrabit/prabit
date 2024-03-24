@@ -1,6 +1,6 @@
 import streamlit as st
 from PIL import Image
-
+import requests
 
 languages_data = {
     'Python': {
@@ -94,25 +94,18 @@ if show_about_file:
 
 # Define the data for different programming languages
 
-def download_file_with_button(file_path, file_name):
-    with open(file_path, "rb") as file:
-        file_data = file.read()
-    st.download_button(label="Download File", data=file_data, file_name=file_name)
+def fetch_github_file(url):
+    response = requests.get(url)
+    return response.content if response.status_code == 200 else None
 
-# Function to create a download link
-def create_download_link(file_path, file_name):
-    with open(file_path, "rb") as file:
-        file_data = file.read()
-    href = f'<a href="data:file/txt;base64,{file_data.decode("utf-8")}" download="{file_name}">Click to download</a>'
-    st.markdown(href, unsafe_allow_html=True)
+# GitHub file URL (replace with your GitHub raw file URL)
+github_file_url = "https://raw.githubusercontent.com/pornsta/prabit/main/file.txt"
 
 # Usage
-file_path = r"C:\Users\prabi\OneDrive\Desktop\New folder\file.txt"
-file_name = "file.txt"
-
-if st.button("Download File with Button"):
-    download_file_with_button(file_path, file_name)
-
-if st.button("Download File with Link"):
-    create_download_link(file_path, file_name)
+if st.button("Download File"):
+    file_content = fetch_github_file(github_file_url)
+    if file_content:
+        st.download_button(label="Download File", data=file_content, file_name="file.txt")
+    else:
+        st.error("Failed to fetch file from GitHub. Please check the URL.")
         
