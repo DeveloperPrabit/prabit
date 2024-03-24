@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 
-# Define the data for different programming languages
+
 languages_data = {
     'Python': {
         'description': 'Python is a high-level programming language known for its simplicity and readability.',
@@ -58,6 +58,10 @@ languages_data = {
     'Perl': {
         'description': 'Perl is a high-level, general-purpose programming language known for its text processing capabilities.',
         'features': ['Text processing', 'System administration', 'Web development']
+    },
+    'dart': {
+        'description': 'dart is a statically typed programming language developed by Google.',
+        'features': ['Concurrency', 'Systems programming', 'Cloud services']
     }
 }
 
@@ -77,3 +81,38 @@ if selected_language:
     st.write('**Key Features:**')
     for feature in languages_data[selected_language]['features']:
         st.write(f'- {feature}')
+#click button for file information
+show_about_file= st.button("click me ")
+if show_about_file:
+ st.subheader("sorry ")
+
+show_about_file = True
+
+if show_about_file:
+ if st.button("About File"):
+        st.write("only txt file contains some information")
+
+# Define the data for different programming languages
+
+def download_file_with_button(file_path, file_name):
+    with open(file_path, "rb") as file:
+        file_data = file.read()
+    st.download_button(label="Download File", data=file_data, file_name=file_name)
+
+# Function to create a download link
+def create_download_link(file_path, file_name):
+    with open(file_path, "rb") as file:
+        file_data = file.read()
+    href = f'<a href="data:file/txt;base64,{file_data.decode("utf-8")}" download="{file_name}">Click to download</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
+# Usage
+file_path = r"C:\Users\prabi\OneDrive\Desktop\New folder\file.txt"
+file_name = "file.txt"
+
+if st.button("Download File with Button"):
+    download_file_with_button(file_path, file_name)
+
+if st.button("Download File with Link"):
+    create_download_link(file_path, file_name)
+        
