@@ -100,16 +100,18 @@ def fetch_github_file(url):
 
 # GitHub file URL (replace with your GitHub raw file URL)
 github_file_url = "https://raw.githubusercontent.com/DeveloperPrabit/prabit/main/file.txt"
+github_file_url = "https://raw.githubusercontent.com/DeveloperPrabit/prabit/main/RESUM_DEV.pdf"
 
 # Usage
 if st.button("Download File"):
     file_content = fetch_github_file(github_file_url)
     if file_content:
-        st.download_button(label="Download now", data=file_content, file_name="file.txt")
-        file_path = r"C:\Users\prabi\OneDrive\Desktop\backend\RESUM_DEV.pdf"
-file_name_Resume = "RESUM_DEV.pdf"
+        st.download_button(label="Download txt", data=file_content, file_name="file.txt")
 if st.button("Download Resume"):
-      download_file_with_button(file_path, file_name_Resume)
+    file_content = fetch_github_file(github_file_url)
+    if file_content:
+        st.download_button(label="Download txt", data=file_content, file_name="RESUM_DEV.pdf")
+   
     else:
         st.error("Failed to fetch file from GitHub. Please check the URL.")
         
