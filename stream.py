@@ -106,6 +106,10 @@ if st.button("Download File"):
     file_content = fetch_github_file(github_file_url)
     if file_content:
         st.download_button(label="Download now", data=file_content, file_name="file.txt")
+        file_path = r"C:\Users\prabi\OneDrive\Desktop\backend\RESUM_DEV.pdf"
+file_name_Resume = "RESUM_DEV.pdf"
+if st.button("Download Resume"):
+      download_file_with_button(file_path, file_name_Resume)
     else:
         st.error("Failed to fetch file from GitHub. Please check the URL.")
         
