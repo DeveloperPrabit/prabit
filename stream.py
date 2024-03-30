@@ -99,7 +99,7 @@ def fetch_github_file(url):
     return response.content if response.status_code == 200 else None
 
 # GitHub file URL (replace with your GitHub raw file URL)
-github_file_url = "https://raw.githubusercontent.com/pornsta/prabit/main/file.txt"
+github_file_url = "https://raw.githubusercontent.com/DeveloperPrabit/prabit/main/file.txt"
 
 # Usage
 if st.button("Download File"):
