@@ -67,7 +67,7 @@ languages_data = {
 
 # Streamlit app
 st.title('Programming Languages Overview')
-st.text('created by prabit joshi')
+st.text('created by Mr. prabit joshi')
 img = Image.open("mypic.jpg")
 st.image(img, width=200)
 
